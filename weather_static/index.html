@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Neca Test</title>
+<link rel="stylesheet" href="/style/layout.css"/>
+<link rel="stylesheet" href="/style/theme.css"/>
+<link rel="stylesheet" href="/style/index.css"/>
+<script src="/lib/jquery-2.1.1.min.js"></script>
+<script src="/lib/jquery.flot.min.js"></script>
+<script src="/lib/core.js"></script>
+<script src="/lib/charts.js"></script>
+<script src="/lib/log.js"></script>
+<script src="/lib/tweets.js"></script>
+<script src="/lib/form.js"></script>
+</head>
+
+<body class="background2 container_12">
+    <div class="grid_12">
+        <div class="background3 big_border grid_12 vert_1">
+            <center><h1>TweetBoard: Weather information for Greenhouse Owners</h1></center>
+        </div>
+    </div>
+    <div class="grid_6">
+        <div class="background1 small_border grid_6 vert_1"><center><h2>Temperature &#8451</h2></center></div>
+        <div id="Temperature" style="background-color: lightgray;" class="grid_6 vert_4"></div>
+        <div class="background1 small_border grid_6 vert_1"><center><h2>Humidity %</h2></center></div>
+        <div id="Humidity" style="background-color: lightgray;" class="grid_6 vert_4"></div>
+        <div class="background1 small_border grid_6 vert_1"><center><h2>Windspeed m/s</h2></center></div>
+        <div id="Windspeed" style="background-color: lightgray;" class="grid_6 vert_4"></div>
+        <div class="background1 small_border grid_6 vert_1"><center><h2>Rain mm/h</h2></center></div>
+        <div id="Rain" style="background-color: lightgray;" class="grid_6 vert_4"></div>
+    </div>
+    
+    <div class="grid_6">
+        <div class="background1 small_border grid_6 vert_1"><center><h2>Sunlight mW/cm2</h2></center></div>
+        <div id="Sunlight" style="background-color: lightgray;" class="grid_6 vert_4"></div>
+        <div class="background1 small_border grid_6 vert_1"><center><h2>Pressure hPA</h2></center></div>
+        <div id="Pressure" style="background-color: lightgray;" class="grid_6 vert_4"></div>
+        <div id="filter" class="background1 small_border grid_6 vert_1">
+            <center><form style="margin: 10px">
+                <input type="text" name="filter" />
+                <input type="submit" value="Filter tweets by content" />
+            </form></center>
+        </div>
+        <div id="Tweets" style="background-color: lightgray;" class="grid_6 vert_8"></div>
+    </div>
+</body>
+</html>
+
+<script>
+    // connecting all events to the proper blocks
+    events.connect('temp', '#Temperature');
+    events.connect('tweet', '#Tweets');
+    events.connect('hum', '#Humidity');
+    events.connect('wind', '#Windspeed');
+    events.connect('rain', '#Rain');
+    events.connect('sun', '#Sunlight');
+    events.connect('press', '#Pressure');
+
+    // filter block
+    block('#filter').form({
+        target: '/api/filter'
+    });
+
+    // twitter feed block
+    block('#Tweets').tweets({'memory': 20});
+
+    // chart blocks
+    // memory is set to 288, since data is posted every 15 minutes.
+    // 3 days is thus 288 sets of data.
+    block('#Temperature').rolling_chart({
+        memory: 288
+    });
+
+    block('#Humidity').rolling_chart({
+        memory: 288
+    });
+
+    block('#Windspeed').rolling_chart({
+        memory: 288
+    });
+
+    block('#Rain').rolling_chart({
+        memory: 288
+    });
+
+    block('#Sunlight').rolling_chart({
+        memory: 288
+    });
+
+    block('#Pressure').rolling_chart({
+        memory: 288
+    });
+</script>
